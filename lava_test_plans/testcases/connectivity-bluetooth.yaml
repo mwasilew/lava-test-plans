@@ -1,0 +1,18 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "connectivity-bluetooth" %}
+{% set test_timeout = 20 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# Add required tags #}
+{% set TAGS = ["has-bt"] %}
+
+{# Bluetooth area: qcom-linux-testkit Runner/suites/Connectivity/Bluetooth #}
+{% set all_tests = [
+    {"name": "BT_FW_KMD_Service", "path": "Runner/suites/Connectivity/Bluetooth/BT_FW_KMD_Service/BT_FW_KMD_Service.yaml", "expected": ["BT_FW_KMD_Service"]},
+    {"name": "BT_ON_OFF", "path": "Runner/suites/Connectivity/Bluetooth/BT_ON_OFF/BT_ON_OFF.yaml", "expected": ["BT_ON_OFF"]},
+    {"name": "BT_SCAN", "path": "Runner/suites/Connectivity/Bluetooth/BT_SCAN/BT_SCAN.yaml", "expected": ["BT_SCAN"]},
+    {"name": "BT_SCAN_PAIR", "path": "Runner/suites/Connectivity/Bluetooth/BT_SCAN_PAIR/BT_SCAN_PAIR.yaml", "include": (BT_TARGET_MAC is defined and BT_TARGET_MAC), "params": {"BT_MAC_ENV": BT_TARGET_MAC|default("")}, "expected": ["BT_SCAN_PAIR"]}
+] %}

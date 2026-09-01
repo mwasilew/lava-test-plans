@@ -1,0 +1,34 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "multimedia-audio" %}
+{% set test_timeout = 45 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# Audio area: qcom-linux-testkit Runner/suites/Multimedia/Audio #}
+{# Playback needs the AudioClips asset bundle, which is deployed only when #}
+{# AUDIO_CLIPS_URL is set, so those entries are gated on it #}
+{% set all_tests = [
+    {"name": "Audio_Card_Registration", "path": "Runner/suites/Multimedia/Audio/Audio_Card_Registration/Audio_Card_Registration.yaml", "expected": ["Audio_Card_Registration"]},
+    {"name": "AudioPlayback_Config01", "path": "Runner/suites/Multimedia/Audio/AudioPlayback/AudioPlayback_Config01.yaml", "include": (AUDIO_CLIPS_URL is defined and AUDIO_CLIPS_URL), "params": {"AUDIO_CLIPS_BASE_DIR": "/home/AudioClips/"}, "expected": ["AudioPlayback_Config01"]},
+    {"name": "AudioPlayback_Config02", "path": "Runner/suites/Multimedia/Audio/AudioPlayback/AudioPlayback_Config02.yaml", "include": (AUDIO_CLIPS_URL is defined and AUDIO_CLIPS_URL), "params": {"AUDIO_CLIPS_BASE_DIR": "/home/AudioClips/"}, "expected": ["AudioPlayback_Config02"]},
+    {"name": "AudioPlayback_Config03", "path": "Runner/suites/Multimedia/Audio/AudioPlayback/AudioPlayback_Config03.yaml", "include": (AUDIO_CLIPS_URL is defined and AUDIO_CLIPS_URL), "params": {"AUDIO_CLIPS_BASE_DIR": "/home/AudioClips/"}, "expected": ["AudioPlayback_Config03"]},
+    {"name": "AudioPlayback_Config04", "path": "Runner/suites/Multimedia/Audio/AudioPlayback/AudioPlayback_Config04.yaml", "include": (AUDIO_CLIPS_URL is defined and AUDIO_CLIPS_URL), "params": {"AUDIO_CLIPS_BASE_DIR": "/home/AudioClips/"}, "expected": ["AudioPlayback_Config04"]},
+    {"name": "AudioPlayback_Config05", "path": "Runner/suites/Multimedia/Audio/AudioPlayback/AudioPlayback_Config05.yaml", "include": (AUDIO_CLIPS_URL is defined and AUDIO_CLIPS_URL), "params": {"AUDIO_CLIPS_BASE_DIR": "/home/AudioClips/"}, "expected": ["AudioPlayback_Config05"]},
+    {"name": "AudioPlayback_Config06", "path": "Runner/suites/Multimedia/Audio/AudioPlayback/AudioPlayback_Config06.yaml", "include": (AUDIO_CLIPS_URL is defined and AUDIO_CLIPS_URL), "params": {"AUDIO_CLIPS_BASE_DIR": "/home/AudioClips/"}, "expected": ["AudioPlayback_Config06"]},
+    {"name": "AudioPlayback_Config07", "path": "Runner/suites/Multimedia/Audio/AudioPlayback/AudioPlayback_Config07.yaml", "include": (AUDIO_CLIPS_URL is defined and AUDIO_CLIPS_URL), "params": {"AUDIO_CLIPS_BASE_DIR": "/home/AudioClips/"}, "expected": ["AudioPlayback_Config07"]},
+    {"name": "AudioPlayback_Config08", "path": "Runner/suites/Multimedia/Audio/AudioPlayback/AudioPlayback_Config08.yaml", "include": (AUDIO_CLIPS_URL is defined and AUDIO_CLIPS_URL), "params": {"AUDIO_CLIPS_BASE_DIR": "/home/AudioClips/"}, "expected": ["AudioPlayback_Config08"]},
+    {"name": "AudioPlayback_Config09", "path": "Runner/suites/Multimedia/Audio/AudioPlayback/AudioPlayback_Config09.yaml", "include": (AUDIO_CLIPS_URL is defined and AUDIO_CLIPS_URL), "params": {"AUDIO_CLIPS_BASE_DIR": "/home/AudioClips/"}, "expected": ["AudioPlayback_Config09"]},
+    {"name": "AudioPlayback_Config10", "path": "Runner/suites/Multimedia/Audio/AudioPlayback/AudioPlayback_Config10.yaml", "include": (AUDIO_CLIPS_URL is defined and AUDIO_CLIPS_URL), "params": {"AUDIO_CLIPS_BASE_DIR": "/home/AudioClips/"}, "expected": ["AudioPlayback_Config10"]},
+    {"name": "AudioRecord_Config01", "path": "Runner/suites/Multimedia/Audio/AudioRecord/AudioRecord_Config01.yaml", "expected": ["AudioRecord_Config01"]},
+    {"name": "AudioRecord_Config02", "path": "Runner/suites/Multimedia/Audio/AudioRecord/AudioRecord_Config02.yaml", "expected": ["AudioRecord_Config02"]},
+    {"name": "AudioRecord_Config03", "path": "Runner/suites/Multimedia/Audio/AudioRecord/AudioRecord_Config03.yaml", "expected": ["AudioRecord_Config03"]},
+    {"name": "AudioRecord_Config04", "path": "Runner/suites/Multimedia/Audio/AudioRecord/AudioRecord_Config04.yaml", "expected": ["AudioRecord_Config04"]},
+    {"name": "AudioRecord_Config05", "path": "Runner/suites/Multimedia/Audio/AudioRecord/AudioRecord_Config05.yaml", "expected": ["AudioRecord_Config05"]},
+    {"name": "AudioRecord_Config06", "path": "Runner/suites/Multimedia/Audio/AudioRecord/AudioRecord_Config06.yaml", "expected": ["AudioRecord_Config06"]},
+    {"name": "AudioRecord_Config07", "path": "Runner/suites/Multimedia/Audio/AudioRecord/AudioRecord_Config07.yaml", "expected": ["AudioRecord_Config07"]},
+    {"name": "AudioRecord_Config08", "path": "Runner/suites/Multimedia/Audio/AudioRecord/AudioRecord_Config08.yaml", "expected": ["AudioRecord_Config08"]},
+    {"name": "AudioRecord_Config09", "path": "Runner/suites/Multimedia/Audio/AudioRecord/AudioRecord_Config09.yaml", "expected": ["AudioRecord_Config09"]},
+    {"name": "AudioRecord_Config10", "path": "Runner/suites/Multimedia/Audio/AudioRecord/AudioRecord_Config10.yaml", "expected": ["AudioRecord_Config10"]}
+] %}

@@ -1,0 +1,19 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "connectivity-ethernet" %}
+{% set test_timeout = 30 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# Ethernet area: qcom-linux-testkit Runner/suites/Connectivity/Ethernet #}
+{# Dual port, suspend/resume and throughput need extra lab setup and are opt-in #}
+{% set all_tests = [
+    {"name": "Ethernet_Inventory_Validation", "path": "Runner/suites/Connectivity/Ethernet/Ethernet_Inventory_Validation/Ethernet_Inventory_Validation.yaml", "expected": ["Ethernet_Inventory_Validation"]},
+    {"name": "Ethernet_Basic_Validation", "path": "Runner/suites/Connectivity/Ethernet/Ethernet_Basic_Validation/Ethernet_Basic_Validation.yaml", "expected": ["Ethernet_Basic_Validation"]},
+    {"name": "Ethernet_Capability_Validation", "path": "Runner/suites/Connectivity/Ethernet/Ethernet_Capability_Validation/Ethernet_Capability_Validation.yaml", "expected": ["Ethernet_Capability_Validation"]},
+    {"name": "Ethernet_Statistics_Validation", "path": "Runner/suites/Connectivity/Ethernet/Ethernet_Statistics_Validation/Ethernet_Statistics_Validation.yaml", "expected": ["Ethernet_Statistics_Validation"]},
+    {"name": "Ethernet_Dual_Port_Validation", "path": "Runner/suites/Connectivity/Ethernet/Ethernet_Dual_Port_Validation/Ethernet_Dual_Port_Validation.yaml", "include": (ETH_DUAL_INTERFACES is defined and ETH_DUAL_INTERFACES), "params": {"ETH_DUAL_INTERFACES": ETH_DUAL_INTERFACES|default("")}, "expected": ["Ethernet_Dual_Port_Validation"]},
+    {"name": "Ethernet_Suspend_Resume_Validation", "path": "Runner/suites/Connectivity/Ethernet/Ethernet_Suspend_Resume_Validation/Ethernet_Suspend_Resume_Validation.yaml", "include": (ETH_SUSPEND_ENABLE is defined and ETH_SUSPEND_ENABLE), "params": {"ETH_SUSPEND_ENABLE": "1"}, "expected": ["Ethernet_Suspend_Resume_Validation"]},
+    {"name": "Ethernet_Throughput_Validation", "path": "Runner/suites/Connectivity/Ethernet/Ethernet_Throughput_Validation/Ethernet_Throughput_Validation.yaml", "include": (ETH_IPERF_SERVER is defined and ETH_IPERF_SERVER), "params": {"ETH_IPERF_SERVER": ETH_IPERF_SERVER|default("")}, "expected": ["Ethernet_Throughput_Validation"]}
+] %}

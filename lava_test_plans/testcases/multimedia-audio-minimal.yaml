@@ -1,0 +1,14 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "multimedia-audio-minimal" %}
+{% set test_timeout = 15 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# Audio area for minimal images: the ALSA-only variants of the audio tests, #}
+{# for rootfs without PipeWire/PulseAudio. Use instead of multimedia-audio. #}
+{% set all_tests = [
+    {"name": "AudioPlayback_minimal", "path": "Runner/suites/Multimedia/Audio/AudioPlayback/AudioPlayback_minimal.yaml", "include": (AUDIO_CLIPS_URL is defined and AUDIO_CLIPS_URL), "params": {"CLIPS_PATH": "/home/AudioClips/"}, "expected": ["AudioPlayback"]},
+    {"name": "AudioRecord_minimal", "path": "Runner/suites/Multimedia/Audio/AudioRecord/AudioRecord_minimal.yaml", "expected": ["AudioRecord"]}
+] %}

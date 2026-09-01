@@ -1,7 +1,7 @@
 {% extends "devices/glymur-crd" %}
 
 {# Device-specific test exclusions for meta-qcom project #}
-{% set EXCLUDED_TESTS = ['fastrpc_test', 'Ethernet', 'EFI_Variable_Validation'] %}
+{% set EXCLUDED_TESTS = ['fastrpc_test', 'Ethernet_Basic_Validation', 'EFI_Variable_Validation'] %}
 
 {# Exclude unsupported testplans for this device #}
 {% set EXCLUDED_TESTPLANS = ['pre-merge-camera.yaml'] %}

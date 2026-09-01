@@ -1,0 +1,25 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "kernel-security" %}
+{% set test_timeout = 60 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# Security area: crypto, RNG, filesystem encryption and the MinkIPC/QTEE stack #}
+{% set all_tests = [
+    {"name": "qcom_crypto", "path": "Runner/suites/Kernel/Baseport/qcom_crypto/qcom_crypto.yaml", "expected": ["qcom_crypto"]},
+    {"name": "qcrypto", "path": "Runner/suites/Kernel/Baseport/qcrypto/qcrypto.yaml", "expected": ["qcrypto"]},
+    {"name": "qcom_hwrng", "path": "Runner/suites/Kernel/Baseport/qcom_hwrng/qcom_hwrng.yaml", "expected": ["qcom_hwrng"]},
+    {"name": "rngtest", "path": "Runner/suites/Kernel/Baseport/rngtest/rngtest.yaml", "expected": ["rngtest"]},
+    {"name": "UserDataEncryption", "path": "Runner/suites/Kernel/Baseport/UserDataEncryption/UserDataEncryption.yaml", "expected": ["UserDataEncryption"]},
+    {"name": "shmbridge", "path": "Runner/suites/Kernel/Baseport/shmbridge/shmbridge.yaml", "expected": ["shmbridge"]},
+    {"name": "MinkIPC_Validation", "path": "Runner/suites/Kernel/Baseport/MinkIPC_Validation/MinkIPC_Validation.yaml", "expected": ["MinkIPC_Validation"]},
+    {"name": "MinkIPC_SMCInvoke_Validation", "path": "Runner/suites/Kernel/Baseport/MinkIPC_SMCInvoke_Validation/MinkIPC_SMCInvoke_Validation.yaml", "expected": ["MinkIPC_SMCInvoke_Validation"]},
+    {"name": "MinkIPC_SMCInvoke_Internal_Validation", "path": "Runner/suites/Kernel/Baseport/MinkIPC_SMCInvoke_Internal_Validation/MinkIPC_SMCInvoke_Internal_Validation.yaml", "expected": ["MinkIPC_SMCInvoke_Internal_Validation"]},
+    {"name": "MinkIPC_SMCInvoke_Callback_Validation", "path": "Runner/suites/Kernel/Baseport/MinkIPC_SMCInvoke_Callback_Validation/MinkIPC_SMCInvoke_Callback_Validation.yaml", "expected": ["MinkIPC_SMCInvoke_Callback_Validation"]},
+    {"name": "MinkIPC_SMCInvoke_Memory_Object_Validation", "path": "Runner/suites/Kernel/Baseport/MinkIPC_SMCInvoke_Memory_Object_Validation/MinkIPC_SMCInvoke_Memory_Object_Validation.yaml", "expected": ["MinkIPC_SMCInvoke_Memory_Object_Validation"]},
+    {"name": "MinkIPC_PKCS11_Validation", "path": "Runner/suites/Kernel/Baseport/MinkIPC_PKCS11_Validation/MinkIPC_PKCS11_Validation.yaml", "expected": ["MinkIPC_PKCS11_Validation"]},
+    {"name": "MinkIPC_PKCS11_Multi_Client_Validation", "path": "Runner/suites/Kernel/Baseport/MinkIPC_PKCS11_Multi_Client_Validation/MinkIPC_PKCS11_Multi_Client_Validation.yaml", "expected": ["MinkIPC_PKCS11_Multi_Client_Validation"]},
+    {"name": "MinkIPC_GPTEEC_Validation", "path": "Runner/suites/Kernel/Baseport/MinkIPC_GPTEEC_Validation/MinkIPC_GPTEEC_Validation.yaml", "expected": ["MinkIPC_GPTEEC_Validation"]}
+] %}

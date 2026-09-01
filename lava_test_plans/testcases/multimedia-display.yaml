@@ -1,0 +1,23 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "multimedia-display" %}
+{% set test_timeout = 45 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{% set TAGS = ["display"] %}
+
+{# Display area: qcom-linux-testkit Runner/suites/Multimedia/Display #}
+{# Weston_Runtime_Preflight has to run first, it gates the weston clients #}
+{% set all_tests = [
+    {"name": "Weston_Runtime_Preflight", "path": "Runner/suites/Multimedia/Display/Weston_Runtime_Preflight/Weston_Runtime_Preflight.yaml", "expected": ["Weston_Runtime_Preflight"]},
+    {"name": "weston-smoke", "path": "Runner/suites/Multimedia/Display/weston-smoke/weston-smoke.yaml", "expected": ["weston-smoke"]},
+    {"name": "weston-clickdot", "path": "Runner/suites/Multimedia/Display/weston-clickdot/weston-smoke.yaml", "expected": ["weston-clickdot"]},
+    {"name": "weston-cliptest", "path": "Runner/suites/Multimedia/Display/weston-cliptest/weston-cliptest.yaml", "expected": ["weston-cliptest"]},
+    {"name": "weston-editor", "path": "Runner/suites/Multimedia/Display/weston-editor/weston-editor.yaml", "expected": ["weston-editor"]},
+    {"name": "weston-flower", "path": "Runner/suites/Multimedia/Display/weston-flower/weston-flower.yaml", "expected": ["weston-flower"]},
+    {"name": "weston-resizor", "path": "Runner/suites/Multimedia/Display/weston-resizor/weston-resizor.yaml", "expected": ["weston-resizor"]},
+    {"name": "weston-scaler", "path": "Runner/suites/Multimedia/Display/weston-scaler/weston-scaler.yaml", "expected": ["weston-scaler"]},
+    {"name": "core_auth", "path": "Runner/suites/Multimedia/Display/igt-gpu-tools/core_auth/core_auth.yaml", "expected": ["core_auth"]}
+] %}

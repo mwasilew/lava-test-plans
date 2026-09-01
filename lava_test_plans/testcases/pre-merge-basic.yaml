@@ -20,7 +20,7 @@
     {"name": "BT_ON_OFF", "path": "Runner/suites/Connectivity/Bluetooth/BT_ON_OFF/BT_ON_OFF.yaml", "expected": ["BT_ON_OFF"]},
     {"name": "AudioRecord", "path": "Runner/suites/Multimedia/Audio/AudioRecord/AudioRecord.yaml", "expected": ["AudioRecord"]},
     {"name": "AudioPlayback", "path": "Runner/suites/Multimedia/Audio/AudioPlayback/AudioPlayback.yaml", "include": (AUDIO_CLIPS_URL is defined and AUDIO_CLIPS_URL), "params": {"AUDIO_CLIPS_BASE_DIR": "/home/AudioClips/"}, "expected": ["AudioPlayback"]},
-    {"name": "Ethernet", "path": "Runner/suites/Connectivity/Ethernet/Ethernet.yaml", "expected": ["Ethernet"]},
+    {"name": "Ethernet_Basic_Validation", "path": "Runner/suites/Connectivity/Ethernet/Ethernet_Basic_Validation/Ethernet_Basic_Validation.yaml", "expected": ["Ethernet_Basic_Validation"]},
     {"name": "DSP_AudioPD", "path": "Runner/suites/Multimedia/DSP_AudioPD/DSP_AudioPD.yaml", "expected": ["DSP_AudioPD"]},
     {"name": "Docker_Kernel_Config", "path": "Runner/suites/System/Docker_Kernel_Config/Docker_Kernel_Config.yaml", "expected": ["Docker_Kernel_Config"]},
     {"name": "EFI_Variable_Validation", "path": "Runner/suites/System/EFI_Variable_Validation/EFI_Variable_Validation.yaml", "expected": ["EFI_Variable_Validation"]},

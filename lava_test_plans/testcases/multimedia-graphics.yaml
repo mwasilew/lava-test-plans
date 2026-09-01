@@ -1,0 +1,17 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "multimedia-graphics" %}
+{% set test_timeout = 30 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{% set TAGS = ["display"] %}
+
+{# Graphics area: qcom-linux-testkit Runner/suites/Multimedia/Graphics, Wayland stack #}
+{% set all_tests = [
+    {"name": "Weston_Runtime_Preflight_Relaunch", "path": "Runner/suites/Multimedia/Display/Weston_Runtime_Preflight/Weston_Runtime_Preflight_Relaunch.yaml", "expected": ["Weston_Runtime_Preflight"]},
+    {"name": "weston-simple-shm", "path": "Runner/suites/Multimedia/Graphics/weston-simple-shm/weston-simple-shm.yaml", "expected": ["weston-simple-shm"]},
+    {"name": "weston-simple-egl", "path": "Runner/suites/Multimedia/Graphics/weston-simple-egl/weston-simple-egl.yaml", "expected": ["weston-simple-egl"]},
+    {"name": "KMSCube", "path": "Runner/suites/Multimedia/Graphics/KMSCube/KMSCube.yaml", "expected": ["KMSCube"]}
+] %}

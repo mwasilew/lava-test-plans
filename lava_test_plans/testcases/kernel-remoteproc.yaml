@@ -1,0 +1,17 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "kernel-remoteproc" %}
+{% set test_timeout = 30 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# Remote processor area: qcom-linux-testkit remoteproc and inter-processor tests #}
+{% set all_tests = [
+    {"name": "remoteproc", "path": "Runner/suites/Kernel/Baseport/remoteproc/remoteproc.yaml", "expected": ["remoteproc"]},
+    {"name": "adsp_remoteproc", "path": "Runner/suites/Kernel/Baseport/adsp_remoteproc/adsp_remoteproc.yaml", "expected": ["adsp_remoteproc"]},
+    {"name": "cdsp_remoteproc", "path": "Runner/suites/Kernel/Baseport/cdsp_remoteproc/cdsp_remoteproc.yaml", "expected": ["cdsp_remoteproc"]},
+    {"name": "gpdsp_remoteproc", "path": "Runner/suites/Kernel/Baseport/gpdsp_remoteproc/gpdsp_remoteproc.yaml", "expected": ["gpdsp_remoteproc"]},
+    {"name": "wpss_remoteproc", "path": "Runner/suites/Kernel/Baseport/wpss_remoteproc/wpss_remoteproc.yaml", "expected": ["wpss_remoteproc"]},
+    {"name": "SMP2P_Validation", "path": "Runner/suites/Kernel/Baseport/SMP2P_Validation/SMP2P_Validation.yaml", "expected": ["SMP2P_Validation"]}
+] %}

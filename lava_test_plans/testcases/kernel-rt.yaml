@@ -1,0 +1,24 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "kernel-rt" %}
+{% set test_timeout = 60 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# Real time area: qcom-linux-testkit Runner/suites/Kernel/RT-tests (rt-tests suite) #}
+{% set all_tests = [
+    {"name": "Cyclictest", "path": "Runner/suites/Kernel/RT-tests/Cyclictest/RT_Cyclictest.yaml", "expected": ["Cyclictest"]},
+    {"name": "CyclicDeadline", "path": "Runner/suites/Kernel/RT-tests/CyclicDeadline/CyclicDeadline.yaml", "expected": ["CyclicDeadline"]},
+    {"name": "OSLat", "path": "Runner/suites/Kernel/RT-tests/OSLat/oslat.yaml", "expected": ["OSLat"]},
+    {"name": "Hackbench", "path": "Runner/suites/Kernel/RT-tests/Hackbench/hackbench.yaml", "expected": ["Hackbench"]},
+    {"name": "PI_Stress", "path": "Runner/suites/Kernel/RT-tests/PI_Stress/pi_stress.yaml", "expected": ["PI_Stress"]},
+    {"name": "PMQTest", "path": "Runner/suites/Kernel/RT-tests/PMQTest/pmqtest.yaml", "expected": ["PMQTest"]},
+    {"name": "PTSEMATest", "path": "Runner/suites/Kernel/RT-tests/PTSEMATest/ptsematest.yaml", "expected": ["PTSEMATest"]},
+    {"name": "SignalTest", "path": "Runner/suites/Kernel/RT-tests/SignalTest/signaltest.yaml", "expected": ["SignalTest"]},
+    {"name": "SigwaitTest", "path": "Runner/suites/Kernel/RT-tests/SigwaitTest/sigwaittest.yaml", "expected": ["SigwaitTest"]},
+    {"name": "SVSematest", "path": "Runner/suites/Kernel/RT-tests/SVSematest/svsemtest.yaml", "expected": ["SVSematest"]},
+    {"name": "SSDD", "path": "Runner/suites/Kernel/RT-tests/SSDD/ssdd.yaml", "expected": ["SSDD"]},
+    {"name": "RTMigrateTest", "path": "Runner/suites/Kernel/RT-tests/RTMigrateTest/rt-migrate-test.yaml", "expected": ["RTMigrateTest"]},
+    {"name": "RTMigrateTest_Full", "path": "Runner/suites/Kernel/RT-tests/RTMigrateTest/rt-migrate-test-full.yaml", "expected": ["RTMigrateTest"]}
+] %}

@@ -1,0 +1,18 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "performance" %}
+{% set test_timeout = 90 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# Performance area: qcom-linux-testkit Runner/suites/Performance #}
+{# Boot_Systemd_KPI_Loop reboots the target, so it runs last #}
+{% set all_tests = [
+    {"name": "Boot_Systemd_Validate", "path": "Runner/suites/Performance/Boot_Systemd_Validate/Boot_Systemd_Validate.yaml", "expected": ["Boot_Systemd_Validate"]},
+    {"name": "Memory_Map", "path": "Runner/suites/Performance/Memory_Map/Memory_Map.yaml", "expected": ["Memory_Map"]},
+    {"name": "Sysbench_Performance", "path": "Runner/suites/Performance/Sysbench_Performance/Sysbench_Performance.yaml", "expected": ["Sysbench_Performance"]},
+    {"name": "Tiotest", "path": "Runner/suites/Performance/Tiotest/tiotest-performance.yaml", "expected": ["Tiotest"]},
+    {"name": "userspace-resource-manager", "path": "Runner/suites/Performance/userspace-resource-manager/userspace-resource-manager.yaml", "expected": ["userspace-resource-manager"]},
+    {"name": "Boot_Systemd_KPI_Loop", "path": "Runner/suites/Performance/Boot_Systemd_KPI_Loop/Boot_Systemd_KPI_Loop.yaml", "expected": ["Boot_Systemd_KPI_Loop"]}
+] %}

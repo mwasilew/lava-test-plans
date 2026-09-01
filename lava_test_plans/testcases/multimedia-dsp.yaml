@@ -1,0 +1,15 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "multimedia-dsp" %}
+{% set test_timeout = 45 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# Compute DSP and sensors area: FastRPC, audio PD, OpenCV and the sensors stack #}
+{% set all_tests = [
+    {"name": "fastrpc_test", "path": "Runner/suites/Multimedia/CDSP/fastrpc_test/fastrpc_test.yaml", "expected": ["fastrpc_test"]},
+    {"name": "DSP_AudioPD", "path": "Runner/suites/Multimedia/DSP_AudioPD/DSP_AudioPD.yaml", "expected": ["DSP_AudioPD"]},
+    {"name": "OpenCV", "path": "Runner/suites/Multimedia/OpenCV/OpenCV.yaml", "expected": ["OpenCV"]},
+    {"name": "Sensors", "path": "Runner/suites/Multimedia/Sensors/sensors.yaml", "expected": ["Sensors"]}
+] %}

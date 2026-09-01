@@ -1,0 +1,12 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "multimedia-video" %}
+{% set test_timeout = 45 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# Video area: the V4L2 (iris) codec runner, qcom-linux-testkit Runner/suites/Multimedia/Video #}
+{% set all_tests = [
+    {"name": "Video_V4L2_Runner", "path": "Runner/suites/Multimedia/Video/Video_V4L2_Runner/Video_V4L2_Runner.yaml", "expected": ["Video_V4L2_Runner"]}
+] %}

@@ -1,0 +1,19 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "kernel-interconnect" %}
+{% set test_timeout = 30 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# Interconnect, cache and memory subsystem area #}
+{% set all_tests = [
+    {"name": "Interconnect_Provider_Validation", "path": "Runner/suites/Kernel/Baseport/Interconnect_Provider_Validation/Interconnect_Provider_Validation.yaml", "expected": ["Interconnect_Provider_Validation"]},
+    {"name": "Interconnect_Topology_Validation", "path": "Runner/suites/Kernel/Baseport/Interconnect_Topology_Validation/Interconnect_Topology_Validation.yaml", "expected": ["Interconnect_Topology_Validation"]},
+    {"name": "LLCC_Validation", "path": "Runner/suites/Kernel/Baseport/LLCC_Validation/LLCC_Validation.yaml", "expected": ["LLCC_Validation"]},
+    {"name": "QCOM_EDAC_Validation", "path": "Runner/suites/Kernel/Baseport/QCOM_EDAC_Validation/QCOM_EDAC_Validation.yaml", "expected": ["QCOM_EDAC_Validation"]},
+    {"name": "QCOM_BWMON_Validation", "path": "Runner/suites/Kernel/Baseport/QCOM_BWMON_Validation/QCOM_BWMON_Validation.yaml", "expected": ["QCOM_BWMON_Validation"]},
+    {"name": "BWMON", "path": "Runner/suites/Kernel/Baseport/BWMON/BWMON.yaml", "expected": ["BWMON"]},
+    {"name": "MEMLAT", "path": "Runner/suites/Kernel/Baseport/MEMLAT/MEMLAT.yaml", "expected": ["MEMLAT"]},
+    {"name": "DMAEngine_Data_Integrity_Validation", "path": "Runner/suites/Kernel/Baseport/DMAEngine_Data_Integrity_Validation/DMAEngine_Data_Integrity_Validation.yaml", "expected": ["DMAEngine_Data_Integrity_Validation"]}
+] %}

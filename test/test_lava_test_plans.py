@@ -56,6 +56,12 @@ meta_qcom_testplans = [
     "meta-qcom/poky-altcfg/boot",
     "meta-qcom/qcom-distro/boot",
     "meta-qcom/qcom-distro/pre-merge",
+    "meta-qcom/qcom-distro/kernel",
+    "meta-qcom/qcom-distro/connectivity",
+    "meta-qcom/qcom-distro/multimedia",
+    "meta-qcom/qcom-distro/performance",
+    "meta-qcom/qcom-distro/system",
+    "meta-qcom/qcom-distro/virtualization",
 ]
 assert len(meta_qcom_testplans) > 0
 meta_qcom_variable_input_file = "projects/meta-qcom/variables.yaml"

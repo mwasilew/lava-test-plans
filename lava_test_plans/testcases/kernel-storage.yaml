@@ -1,0 +1,18 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "kernel-storage" %}
+{% set test_timeout = 30 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# Storage area: qcom-linux-testkit Runner/suites/Kernel/Baseport/Storage #}
+{% set all_tests = [
+    {"name": "Partition_PostBoot_Validation", "path": "Runner/suites/Kernel/Baseport/Storage/Partition_PostBoot_Validation/Partition_PostBoot_Validation.yaml", "expected": ["Partition_PostBoot_Validation"]},
+    {"name": "eMMC_Validation", "path": "Runner/suites/Kernel/Baseport/Storage/eMMC_Validation/eMMC_Validation.yaml", "expected": ["eMMC_Validation"]},
+    {"name": "UFS_Validation", "path": "Runner/suites/Kernel/Baseport/Storage/UFS_Validation/UFS_Validation.yaml", "expected": ["UFS_Validation"]},
+    {"name": "RMTFS_Validation", "path": "Runner/suites/Kernel/Baseport/Storage/RMTFS_Validation/RMTFS_Validation.yaml", "expected": ["RMTFS_Validation"]},
+    {"name": "RMTFS_Shared_Memory_Validation", "path": "Runner/suites/Kernel/Baseport/Storage/RMTFS_Shared_Memory_Validation/RMTFS_Shared_Memory_Validation.yaml", "expected": ["RMTFS_Shared_Memory_Validation"]},
+    {"name": "RMTFS_QMI_Service_Validation", "path": "Runner/suites/Kernel/Baseport/Storage/RMTFS_QMI_Service_Validation/RMTFS_QMI_Service_Validation.yaml", "expected": ["RMTFS_QMI_Service_Validation"]},
+    {"name": "RMTFS_Partition_Read_Validation", "path": "Runner/suites/Kernel/Baseport/Storage/RMTFS_Partition_Read_Validation/RMTFS_Partition_Read_Validation.yaml", "expected": ["RMTFS_Partition_Read_Validation"]}
+] %}
