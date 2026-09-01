@@ -10,14 +10,9 @@ import pytest
 import shlex
 import tempfile
 
-test_lava_validity = (
-    "" if os.getenv("SKIP_TEST_LAVA_VALIDITY") else "--test-lava-validity"
-)
-
-test_lava_validity_container = (
-    "--test-lava-validity-container %s" % os.getenv("TEST_LAVA_VALIDITY_CONTAINER")
-    if os.getenv("TEST_LAVA_VALIDITY_CONTAINER")
-    else ""
+from test.validity_helpers import (
+    test_lava_validity,
+    test_lava_validity_container,
 )
 
 # all Linux tests all devices
