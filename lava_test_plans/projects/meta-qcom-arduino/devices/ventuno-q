@@ -6,7 +6,7 @@
 
 {# The base device describes the Debian image layout, which is flashed with
    xbl_s_devprg_ns.melf and splits the spinor content into its own qdl stage.
-   meta-qcom-3rdparty builds the qcs8275-monza eMMC layout instead: it spans
+   meta-qcom-arduino builds the qcs8275-monza eMMC layout instead: it spans
    two eMMC physical partitions (the main user data area and the OTP area
    holding the cdt), so ptool emits a rawprogram/patch pair per physical
    partition and everything is flashed in a single eMMC stage. #}
