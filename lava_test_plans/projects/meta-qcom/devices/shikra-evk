@@ -1,7 +1,7 @@
 {% extends "devices/shikra-iqs-evk" %}
 
 {# Device-specific test exclusions for meta-qcom project #}
-{% set EXCLUDED_TESTS = ['fastrpc_test', 'AudioRecord', 'AudioPlayback', 'DSP_AudioPD', 'cdsp_remoteproc', 'adsp_remoteproc', 'WiFi_Firmware_Driver', 'WiFi_OnOff'] %}
+{% set EXCLUDED_TESTS = ['AudioRecord', 'AudioPlayback', 'DSP_AudioPD', 'cdsp_remoteproc', 'adsp_remoteproc', 'WiFi_Firmware_Driver', 'WiFi_OnOff'] %}
 
 {% set flasher_device_type = "qcs" %}
 

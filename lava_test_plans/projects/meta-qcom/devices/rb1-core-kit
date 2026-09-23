@@ -1,7 +1,7 @@
 {% extends "devices/qrb2210-rb1" %}
 
 {# Device-specific test exclusions for meta-qcom project #}
-{% set EXCLUDED_TESTS = ['AudioRecord', 'AudioPlayback', 'EFI_Variable_Validation', 'cdsp_remoteproc', 'DSP_AudioPD', 'fastrpc_test'] %}
+{% set EXCLUDED_TESTS = ['AudioRecord', 'AudioPlayback', 'EFI_Variable_Validation', 'cdsp_remoteproc', 'DSP_AudioPD'] %}
 
 {# Exclude unsupported testplan for this device #}
 {% set EXCLUDED_TESTPLANS = ['pre-merge-audio.yaml', 'pre-merge-camera.yaml'] %}
