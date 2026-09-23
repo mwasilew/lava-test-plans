@@ -1,0 +1,12 @@
+{% extends "devices/monaco-ride" %}
+
+{# the sail_nor + ufs flashing stages come from the common device #}
+{% set qdl_image_dir = "flash_qcs8300-ride_ufs" %}
+{% set qdl_rootfs_image = "disk-ufs.img2" %}
+{% set qdl_tarball = "flash-ufs.tar.gz" %}
+
+{# exclusions are tracked in                                     #}
+{# https://github.com/qualcomm-linux/qcom-deb-images/issues/647 #}
+{% import "projects/qcom-deb-images/include/excluded-tests.jinja2" as excluded %}
+{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS %}
+{% set EXCLUDED_TESTPLANS = excluded.EXCLUDED_TESTPLANS %}
