@@ -1,0 +1,21 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "multimedia-camera" %}
+{% set test_timeout = 20 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# Camera job metadata only #}
+{% set TAGS = ["has-camera"] %}
+
+{# Enable camera-specific postprocessing for devices that need it #}
+{% set ENABLE_CAMERA_POSTPROCESS = true %}
+
+{# Camera area: qcom-linux-testkit Runner/suites/Multimedia/Camera #}
+{# Camera_NHX needs a CAMX/NHX JSON config, so it is gated on NHX_JSON #}
+{% set all_tests = [
+    {"name": "Libcamera_cam", "path": "Runner/suites/Multimedia/Camera/Libcamera_cam/Libcamera_cam.yaml", "expected": ["Libcamera_cam"]},
+    {"name": "Camera_RDI_FrameCapture", "path": "Runner/suites/Multimedia/Camera/Camera_RDI_FrameCapture/Camera_RDI_FrameCapture.yaml", "expected": ["Camera_RDI_FrameCapture"]},
+    {"name": "Camera_NHX", "path": "Runner/suites/Multimedia/Camera/Camera_NHX/Camera_NHX_Preview.yaml", "include": (NHX_JSON is defined and NHX_JSON), "params": {"NHX_JSON": NHX_JSON|default("")}, "expected": ["Camera_NHX"]}
+] %}

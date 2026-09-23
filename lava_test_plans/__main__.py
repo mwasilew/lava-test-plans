@@ -123,6 +123,67 @@ def _get_test_plan_list(test_plan_path):
     return ret_list
 
 
+def _check_lava_validity(container_image, jobs_dir, job_files):
+    """
+    Validates rendered LAVA job files with lava-schema.py from a container.
+
+    lava-schema.py accepts several job files at once and exits with the
+    number of invalid ones, so the whole batch is checked by a single
+    container instead of one container per file.
+
+    Returns 0 when every file is valid, 1 otherwise.
+    """
+    import docker
+
+    if not job_files:
+        logger.warning("No job files were rendered, skipping LAVA validity check")
+        return 0
+
+    logger.debug("Checking for LAVA validity in %s" % jobs_dir)
+    logger.debug(job_files)
+
+    container = None
+    try:
+        client = docker.from_env(version="1.38")
+        container = client.containers.run(
+            image=container_image,
+            command=["/usr/share/lava-common/lava-schema.py", "job"]
+            + ["/data/%s" % job_file for job_file in job_files],
+            volumes={jobs_dir: {"bind": "/data", "mode": "ro"}},
+            detach=True,
+        )
+        container_exit_code = container.wait()
+        logger.debug(container_exit_code)
+        # lava-schema.py reports on stdout, so the logs have to be collected
+        # explicitly. containers.run(detach=False) only keeps stderr when the
+        # command fails, which would drop the per file reasons.
+        container_logs = container.logs().decode("utf-8", errors="replace")
+    except (docker.errors.DockerException, requests.exceptions.RequestException) as e:
+        logger.error("LAVA validation of %s could not be performed" % jobs_dir)
+        logger.error(e)
+        return 1
+    finally:
+        if container is not None:
+            try:
+                container.remove(force=True)
+            except docker.errors.DockerException as e:
+                logger.warning("Failed to remove the validation container: %s" % e)
+
+    # the paths in the report are the ones seen inside the container
+    container_logs = container_logs.replace("/data/", "%s/" % jobs_dir)
+    if container_exit_code["StatusCode"] != 0:
+        logger.error(
+            "LAVA validation failed for %s of %s job(s) in %s"
+            % (container_exit_code["StatusCode"], len(job_files), jobs_dir)
+        )
+        for line in container_logs.splitlines():
+            logger.error(line)
+        return 1
+    for line in container_logs.splitlines():
+        logger.debug(line)
+    return 0
+
+
 def _submit_to_squad(lava_job, lava_url_base, qa_server_api, qa_server_base, qa_token):
     headers = {"Auth-Token": qa_token}
 
@@ -400,6 +461,7 @@ def main():
             overlays.append((f"overlay-{index:02}", item[0], item[1]))
 
     lava_jobs = []
+    job_files = []
 
     template_dirs = [
         os.path.abspath(args.template_path),
@@ -542,36 +604,26 @@ def main():
         if exit_code != 0:
             return exit_code
         if args.dryrun and lava_job is not None:
-            testpath = os.path.join(
-                output_path, args.device_type, os.path.basename(test)
-            )
+            job_file = os.path.basename(test)
+            testpath = os.path.join(output_path, args.device_type, job_file)
             logger.info(testpath)
             if not os.path.exists(os.path.dirname(testpath)):
                 os.makedirs(os.path.dirname(testpath), exist_ok=True)
-            with open(os.path.join(testpath), "w") as f:
+            with open(testpath, "w") as f:
                 f.write(lava_job)
+            job_files.append(job_file)
 
     if args.test_lava_validity:
-        import docker
-
-        client = docker.from_env(version="1.38")
-        logger.debug("Checking for LAVA validity")
-        for test in set(test_list):
-            testpath = os.path.join(os.getcwd(), output_path, args.device_type)
-            logger.debug(testpath)
-            logger.debug(test)
-            container = client.containers.run(
-                image=args.test_lava_validity_container,
-                command="/usr/share/lava-common/lava-schema.py job /data/%s" % test,
-                volumes={"%s" % testpath: {"bind": "/data", "mode": "rw"}},
-                detach=True,
+        if not args.dryrun:
+            logger.warning(
+                "--test-lava-validity requires --dry-run, skipping validation"
             )
-            container_exit_code = container.wait()
-            logger.debug(exit_code)
-            if container_exit_code["StatusCode"] != 0:
-                logger.error("LAVA validation of %s/%s failed" % (testpath, test))
-                logger.error(container.logs())
-                exit_code = 1
+        elif _check_lava_validity(
+            args.test_lava_validity_container,
+            os.path.join(output_path, args.device_type),
+            sorted(set(job_files)),
+        ):
+            exit_code = 1
 
     if not args.dryrun:
         if not args.qa_server:

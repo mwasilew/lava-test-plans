@@ -1,0 +1,24 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "kernel-coresight" %}
+{% set test_timeout = 45 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# CoreSight trace area: qcom-linux-testkit Runner/suites/Kernel/DEBUG plus the #}
+{# STM/ETM baseport tests that exercise the same trace infrastructure #}
+{% set all_tests = [
+    {"name": "Node-Access", "path": "Runner/suites/Kernel/DEBUG/Node-Access/Node-Access.yaml", "expected": ["Node-Access"]},
+    {"name": "stm_cpu", "path": "Runner/suites/Kernel/Baseport/stm_cpu/stm_cpu.yaml", "expected": ["stm_cpu"]},
+    {"name": "etm_trace", "path": "Runner/suites/Kernel/Baseport/etm_trace/etm_trace.yaml", "expected": ["etm_trace"]},
+    {"name": "STM-Source-Enable-Disable", "path": "Runner/suites/Kernel/DEBUG/STM-Source-Enable-Disable/STM-Source-Enable-Disable.yaml", "expected": ["STM-Source-Enable-Disable"]},
+    {"name": "STM-HWE-PORT-SWITCH", "path": "Runner/suites/Kernel/DEBUG/STM-HWE-PORT-SWITCH/STM-HWE-PORT-SWITCH.yaml", "expected": ["STM-HWE-PORT-SWITCH"]},
+    {"name": "STM-Trace-Marker", "path": "Runner/suites/Kernel/DEBUG/STM-Trace-Marker/STM-Trace-Marker.yaml", "expected": ["STM-Trace-Marker"]},
+    {"name": "MultiSource-STM-ETM", "path": "Runner/suites/Kernel/DEBUG/MultiSource-STM-ETM/MultiSource-STM-ETM.yaml", "expected": ["MultiSource-STM-ETM"]},
+    {"name": "Sink-Status-STM-Toggle", "path": "Runner/suites/Kernel/DEBUG/Sink-Status-STM-Toggle/Sink-Status-STM-Toggle.yaml", "expected": ["Sink-Status-STM-Toggle"]},
+    {"name": "CTI-Test", "path": "Runner/suites/Kernel/DEBUG/CTI-Test/CTI-Test.yaml", "expected": ["CTI-Test"]},
+    {"name": "CTI-Enable-Disable", "path": "Runner/suites/Kernel/DEBUG/CTI-Enable-Disable/CTI-Enable-Disable.yaml", "expected": ["CTI-Enable-Disable"]},
+    {"name": "TPDM-Enable-Disable", "path": "Runner/suites/Kernel/DEBUG/TPDM-Enable-Disable/TPDM-Enable-Disable.yaml", "expected": ["TPDM-Enable-Disable"]},
+    {"name": "TPDM-Interface-Access", "path": "Runner/suites/Kernel/DEBUG/TPDM-Interface-Access/TPDM-Interface-Access.yaml", "expected": ["TPDM-Interface-Access"]}
+] %}

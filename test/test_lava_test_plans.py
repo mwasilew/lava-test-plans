@@ -10,14 +10,9 @@ import pytest
 import shlex
 import tempfile
 
-test_lava_validity = (
-    "" if os.getenv("SKIP_TEST_LAVA_VALIDITY") else "--test-lava-validity"
-)
-
-test_lava_validity_container = (
-    "--test-lava-validity-container %s" % os.getenv("TEST_LAVA_VALIDITY_CONTAINER")
-    if os.getenv("TEST_LAVA_VALIDITY_CONTAINER")
-    else ""
+from test.validity_helpers import (
+    test_lava_validity,
+    test_lava_validity_container,
 )
 
 # all Linux tests all devices
@@ -56,6 +51,12 @@ meta_qcom_testplans = [
     "meta-qcom/poky-altcfg/boot",
     "meta-qcom/qcom-distro/boot",
     "meta-qcom/qcom-distro/pre-merge",
+    "meta-qcom/qcom-distro/kernel",
+    "meta-qcom/qcom-distro/connectivity",
+    "meta-qcom/qcom-distro/multimedia",
+    "meta-qcom/qcom-distro/performance",
+    "meta-qcom/qcom-distro/system",
+    "meta-qcom/qcom-distro/virtualization",
 ]
 assert len(meta_qcom_testplans) > 0
 meta_qcom_variable_input_file = "projects/meta-qcom/variables.yaml"

@@ -1,0 +1,16 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "system" %}
+{% set test_timeout = 25 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# System area: qcom-linux-testkit Runner/suites/System #}
+{% set all_tests = [
+    {"name": "EFI_Variable_Validation", "path": "Runner/suites/System/EFI_Variable_Validation/EFI_Variable_Validation.yaml", "expected": ["EFI_Variable_Validation"]},
+    {"name": "Docker_Kernel_Config", "path": "Runner/suites/System/Docker_Kernel_Config/Docker_Kernel_Config.yaml", "expected": ["Docker_Kernel_Config"]},
+    {"name": "Kubernetes_Kernel_Config", "path": "Runner/suites/System/Kubernetes_Kernel_Config/Kubernetes_Kernel_Config.yaml", "expected": ["Kubernetes_Kernel_Config"]},
+    {"name": "Logging_Journalctl_Validation", "path": "Runner/suites/System/Logging/Logging_Journalctl_Validation/Logging_Journalctl_Validation.yaml", "expected": ["Logging_Journalctl_Validation"]},
+    {"name": "DIAG_Functional_Validation", "path": "Runner/suites/System/Logging/DIAG_Functional_Validation/DIAG_Functional_Validation.yaml", "expected": ["DIAG_Functional_Validation"]}
+] %}

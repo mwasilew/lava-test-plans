@@ -1,0 +1,29 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "kernel-baseport" %}
+{% set test_timeout = 45 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# Kernel baseport area: qcom-linux-testkit Runner/suites/Kernel/Baseport core tests #}
+{# plus the DCVS and Scheduler suites, which validate the same CPU/PM plumbing #}
+{% set all_tests = [
+    {"name": "Probe_Failure_Check", "path": "Runner/suites/Kernel/Baseport/Probe_Failure_Check/Probe_Failure_Check.yaml", "expected": ["Probe_Failure_Check"]},
+    {"name": "hotplug", "path": "Runner/suites/Kernel/Baseport/hotplug/hotplug.yaml", "expected": ["hotplug"]},
+    {"name": "CPUFreq_Validation", "path": "Runner/suites/Kernel/Baseport/CPUFreq_Validation/CPUFreq_Validation.yaml", "expected": ["CPUFreq_Validation"]},
+    {"name": "Freq_Scaling", "path": "Runner/suites/Kernel/DCVS/Freq_Scaling/Freq_Scaling.yaml", "expected": ["Freq_Scaling"]},
+    {"name": "CPU_affinity", "path": "Runner/suites/Kernel/Scheduler/CPU_affinity/CPU_affinity.yaml", "expected": ["CPU_affinity"]},
+    {"name": "Interrupts", "path": "Runner/suites/Kernel/Baseport/Interrupts/Interrupts.yaml", "expected": ["Interrupts"]},
+    {"name": "irq", "path": "Runner/suites/Kernel/Baseport/irq/irq.yaml", "expected": ["irq"]},
+    {"name": "GIC", "path": "Runner/suites/Kernel/Baseport/GIC/GIC.yaml", "expected": ["GIC"]},
+    {"name": "Timer", "path": "Runner/suites/Kernel/Baseport/Timer/Timer.yaml", "expected": ["Timer"]},
+    {"name": "IPCC", "path": "Runner/suites/Kernel/Baseport/IPCC/IPCC.yaml", "expected": ["IPCC"]},
+    {"name": "kaslr", "path": "Runner/suites/Kernel/Baseport/kaslr/kaslr.yaml", "expected": ["kaslr"]},
+    {"name": "iommu", "path": "Runner/suites/Kernel/Baseport/iommu/iommu.yaml", "expected": ["iommu"]},
+    {"name": "smmu", "path": "Runner/suites/Kernel/Baseport/smmu/smmu.yaml", "expected": ["smmu"]},
+    {"name": "pinctrl", "path": "Runner/suites/Kernel/Baseport/pinctrl/pinctrl.yaml", "expected": ["pinctrl"]},
+    {"name": "Buses", "path": "Runner/suites/Kernel/Baseport/Buses/Buses.yaml", "expected": ["Buses"]},
+    {"name": "Module_Reload_Validation", "path": "Runner/suites/Kernel/Baseport/Module_Reload_Validation/Module_Reload_Validation.yaml", "expected": ["Module_Reload_Validation"]},
+    {"name": "watchdog", "path": "Runner/suites/Kernel/Baseport/watchdog/watchdog.yaml", "expected": ["watchdog"]}
+] %}

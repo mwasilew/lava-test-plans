@@ -1,0 +1,19 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "multimedia-graphics-x11" %}
+{% set test_timeout = 30 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{% set TAGS = ["display"] %}
+
+{# Graphics area, X11 stack. Only for images that ship an X server, use #}
+{# multimedia-graphics instead on Wayland only images. #}
+{% set all_tests = [
+    {"name": "X11_Display_Validation", "path": "Runner/suites/Multimedia/Graphics/X11_Display_Validation/X11_Display_Validation.yaml", "expected": ["X11_Display_Validation"]},
+    {"name": "X11_GLX", "path": "Runner/suites/Multimedia/Graphics/X11_GLX/X11_GLX.yaml", "expected": ["X11_GLX"]},
+    {"name": "X11_EGL_GLES", "path": "Runner/suites/Multimedia/Graphics/X11_EGL_GLES/X11_EGL_GLES.yaml", "expected": ["X11_EGL_GLES"]},
+    {"name": "X11_Glmark2", "path": "Runner/suites/Multimedia/Graphics/X11_Glmark2/X11_Glmark2.yaml", "expected": ["X11_Glmark2"]},
+    {"name": "X11_GStreamer_Display", "path": "Runner/suites/Multimedia/Graphics/X11_GStreamer_Display/X11_GStreamer_Display.yaml", "expected": ["X11_GStreamer_Display"]}
+] %}

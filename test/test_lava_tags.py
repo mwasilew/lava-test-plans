@@ -7,8 +7,9 @@ import os
 import pytest
 import shlex
 
-test_lava_validity = (
-    "" if os.getenv("SKIP_TEST_LAVA_VALIDITY") else "--test-lava-validity"
+from test.validity_helpers import (
+    test_lava_validity,
+    test_lava_validity_container,
 )
 
 devices = ["qemu_arm64"]
@@ -24,6 +25,6 @@ for device in devices:
 def test_call_lava_tags_testcase(param):
     variable_input_file, device, testcase = param
     sys.argv = shlex.split(
-        f'lava_test_plans --dry-run --variables "{variable_input_file}" --device-type "{device}" --test-case "{testcase}" {test_lava_validity}'
+        f'lava_test_plans --dry-run --variables "{variable_input_file}" --device-type "{device}" --test-case "{testcase}" {test_lava_validity} {test_lava_validity_container}'
     )
     assert main() == 0

@@ -1,7 +1,7 @@
 {% extends "devices/sm8750-mtp" %}
 
 {# Device-specific test exclusions for meta-qcom project #}
-{% set EXCLUDED_TESTS = ['Ethernet'] %}
+{% set EXCLUDED_TESTS = ['Ethernet_Basic_Validation'] %}
 
 {% set flasher_device_type = "sm8750-mtp" %}
 

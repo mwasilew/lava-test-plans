@@ -1,0 +1,17 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "multimedia-gstreamer" %}
+{% set test_timeout = 60 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# GStreamer area: qcom-linux-testkit Runner/suites/Multimedia/GSTreamer #}
+{% set all_tests = [
+    {"name": "GStreamer_Audio_Playback", "path": "Runner/suites/Multimedia/GSTreamer/Audio/Audio_Playback/Audio_Playback.yaml", "expected": ["Audio_Playback"]},
+    {"name": "GStreamer_Audio_Record_Playback", "path": "Runner/suites/Multimedia/GSTreamer/Audio/Audio_Record_Playback/Audio_Record_Playback.yaml", "expected": ["Audio_Record_Playback"]},
+    {"name": "GStreamer_Video_Encode_Decode", "path": "Runner/suites/Multimedia/GSTreamer/Video/Video_Encode_Decode/Video_Encode_Decode.yaml", "expected": ["Video_Encode_Decode"]},
+    {"name": "GStreamer_Camera_Tests", "path": "Runner/suites/Multimedia/GSTreamer/Camera/Camera_Tests/Camera_Tests.yaml", "expected": ["Camera_Tests"]},
+    {"name": "GStreamer_Waylandsink_Playback", "path": "Runner/suites/Multimedia/GSTreamer/Display/Waylandsink_Playback/Waylandsink_Playback.yaml", "expected": ["Waylandsink_Playback"]},
+    {"name": "GStreamer_AI_ML", "path": "Runner/suites/Multimedia/GSTreamer/AI_ML/AI_ML.yaml", "expected": ["AI_ML"]}
+] %}

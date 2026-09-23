@@ -1,0 +1,17 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "kernel-peripherals" %}
+{% set test_timeout = 30 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# Peripheral bus area: PCIe, USB host and the modem data path drivers #}
+{% set all_tests = [
+    {"name": "PCIe", "path": "Runner/suites/Kernel/Baseport/PCIe/PCIe.yaml", "expected": ["PCIe"]},
+    {"name": "USBHost", "path": "Runner/suites/Kernel/Baseport/USBHost/USBHost.yaml", "expected": ["USBHost"]},
+    {"name": "usb_hid", "path": "Runner/suites/Kernel/Baseport/usb_hid/usb_hid.yaml", "expected": ["usb_hid"]},
+    {"name": "usb_msd", "path": "Runner/suites/Kernel/Baseport/USB/usb_msd/usb_msd.yaml", "expected": ["usb_msd"]},
+    {"name": "IPA", "path": "Runner/suites/Kernel/Baseport/IPA/IPA.yaml", "expected": ["IPA"]},
+    {"name": "RMNET", "path": "Runner/suites/Kernel/Baseport/RMNET/RMNET.yaml", "expected": ["RMNET"]}
+] %}

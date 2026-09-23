@@ -1,7 +1,7 @@
 {% extends "devices/kaanapali-mtp" %}
 
 {# Device-specific test exclusions for meta-qcom project #}
-{% set EXCLUDED_TESTS = ['DSP_AudioPD', 'Ethernet', 'WiFi_OnOff', 'BT_ON_OFF', 'EFI_Variable_Validation'] %}
+{% set EXCLUDED_TESTS = ['DSP_AudioPD', 'Ethernet_Basic_Validation', 'WiFi_OnOff', 'BT_ON_OFF', 'EFI_Variable_Validation'] %}
 
 {# Exclude unsupported testplan for this device #}
 {% set EXCLUDED_TESTPLANS = ['pre-merge-bt.yaml', 'pre-merge-camera.yaml', 'pre-merge-gstr-video.yaml'] %}

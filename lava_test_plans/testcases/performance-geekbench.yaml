@@ -1,0 +1,15 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "performance-geekbench" %}
+{% set test_timeout = 90 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# Geekbench 6 runs, kept apart from the rest of the Performance area because #}
+{# they need the (licensed) geekbench binary on the rootfs #}
+{% set all_tests = [
+    {"name": "Geekbench", "path": "Runner/suites/Performance/Geekbench/geekbench-performance.yaml", "expected": ["Geekbench"]},
+    {"name": "Geekbench_CPU_Single", "path": "Runner/suites/Performance/Geekbench/geekbench-cpu-single.yaml", "expected": ["Geekbench"]},
+    {"name": "Geekbench_CPU_Multi", "path": "Runner/suites/Performance/Geekbench/geekbench-cpu-multi.yaml", "expected": ["Geekbench"]}
+] %}

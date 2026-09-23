@@ -1,4 +1,4 @@
 {% extends "devices/qcs6490-rb3gen2" %}
 
 {# Device-specific test exclusions for meta-qcom project #}
-{% set EXCLUDED_TESTS = ["Ethernet"] %}
+{% set EXCLUDED_TESTS = ["Ethernet_Basic_Validation"] %}

@@ -1,0 +1,14 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "virtualization" %}
+{% set test_timeout = 25 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# Virtualization area: qcom-linux-testkit Runner/suites/Virtualization #}
+{% set all_tests = [
+    {"name": "KVM_Driver", "path": "Runner/suites/Virtualization/KVM/KVM_Driver/KVM_Driver.yaml", "expected": ["KVM_Driver"]},
+    {"name": "KVM_Infra", "path": "Runner/suites/Virtualization/KVM/KVM_Infra/KVM_Infra.yaml", "expected": ["KVM_Infra"]},
+    {"name": "KVM_EL2_DTB", "path": "Runner/suites/Virtualization/KVM/KVM_EL2_DTB/KVM_EL2_DTB.yaml", "expected": ["KVM_EL2_DTB"]}
+] %}

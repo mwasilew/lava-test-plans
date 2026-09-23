@@ -1,0 +1,16 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{% set test_name = "connectivity-wifi" %}
+{% set test_timeout = 25 %}
+
+{# Get excluded tests list from device file #}
+{% set EXCLUDED_TESTS = EXCLUDED_TESTS|default([]) %}
+
+{# WiFi area: qcom-linux-testkit Runner/suites/Connectivity/WiFi #}
+{# The IP acquisition tests need an access point, so they are gated on WIFI_SSID_NAME #}
+{% set all_tests = [
+    {"name": "WiFi_Firmware_Driver", "path": "Runner/suites/Connectivity/WiFi/WiFi_Firmware_Driver/WiFi_Firmware_Driver.yaml", "expected": ["WiFi_Firmware_Driver"]},
+    {"name": "WiFi_OnOff", "path": "Runner/suites/Connectivity/WiFi/WiFi_OnOff/WiFi_OnOff.yaml", "expected": ["WiFi_OnOff"]},
+    {"name": "WiFi_Dynamic_IP", "path": "Runner/suites/Connectivity/WiFi/WiFi_Dynamic_IP/WiFi_Dynamic_IP.yaml", "include": (WIFI_SSID_NAME is defined and WIFI_SSID_NAME), "params": {"SSID": WIFI_SSID_NAME|default(""), "PASSWORD": WIFI_SSID_PASSWORD|default("")}, "expected": ["WiFi_Dynamic_IP"]},
+    {"name": "WiFi_Manual_IP", "path": "Runner/suites/Connectivity/WiFi/WiFi_Manual_IP/WiFi_Manual_IP.yaml", "include": (WIFI_SSID_NAME is defined and WIFI_SSID_NAME), "params": {"SSID": WIFI_SSID_NAME|default(""), "PASSWORD": WIFI_SSID_PASSWORD|default("")}, "expected": ["WiFi_Manual_IP"]}
+] %}
