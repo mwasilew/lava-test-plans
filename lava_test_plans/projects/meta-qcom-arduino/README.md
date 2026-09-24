@@ -1,9 +1,9 @@
-# meta-qcom-3rdparty LAVA test plans
+# meta-qcom-arduino LAVA test plans
 
 ## Brief
 
-Test plans for [meta-qcom-3rdparty](https://github.com/qualcomm-linux/meta-qcom-3rdparty),
-the Yocto BSP layer for third-party Qualcomm based boards. The layer builds
+Test plans for [meta-qcom-arduino](https://github.com/qualcomm-linux/meta-qcom-arduino),
+the Yocto BSP layer for Arduino boards based on Qualcomm SoCs. The layer builds
 `core-image-base` for the `nodistro` configuration and `qcom-multimedia-image`
 for `qcom-distro`, publishing a `qcomflash` tarball per machine, so every device
 here deploys with `to: qdl`.
@@ -16,7 +16,7 @@ here deploys with `to: qdl`.
 | `ventuno-q` | `monaco-arduino-monza` | `devices/monaco-arduino-monza` |
 
 The device files are named after the Yocto MACHINE, because the GitHub workflow
-passes the machine name as `--device-type projects/meta-qcom-3rdparty/devices/<machine>`
+passes the machine name as `--device-type projects/meta-qcom-arduino/devices/<machine>`
 and derives the artifact names from it. The rendered `device_type:` comes from
 the base device's `device_type` block, so the LAVA device type and the machine
 name stay decoupled.
@@ -35,9 +35,9 @@ Render a job without submitting it:
 
 ```sh
 python3 -m lava_test_plans \
-    --variables lava_test_plans/projects/meta-qcom-3rdparty/variables.ini \
-    --device-type projects/meta-qcom-3rdparty/devices/ventuno-q \
-    --test-plan meta-qcom-3rdparty/nodistro/boot \
+    --variables lava_test_plans/projects/meta-qcom-arduino/variables.ini \
+    --device-type projects/meta-qcom-arduino/devices/ventuno-q \
+    --test-plan meta-qcom-arduino/nodistro/boot \
     --dry-run
 ```
 

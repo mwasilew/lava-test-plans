@@ -1,5 +1,5 @@
 "PROJECT_NAME": "test"
-"PROJECT": "projects/meta-qcom-3rdparty/"
+"PROJECT": "projects/meta-qcom-arduino/"
 "LAVA_JOB_PRIORITY": "99"
 "BUILD_NUMBER": "123"
 # qcomflash deployment variables

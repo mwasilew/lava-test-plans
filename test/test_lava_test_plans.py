@@ -117,36 +117,36 @@ def test_call_lava_test_plan_testplans_project_qcom_deb_images(param):
     assert main() == 0
 
 
-# meta-qcom-3rdparty tests
-meta_qcom_3rdparty_project_device_path = (
-    "lava_test_plans/projects/meta-qcom-3rdparty/devices"
+# meta-qcom-arduino tests
+meta_qcom_arduino_project_device_path = (
+    "lava_test_plans/projects/meta-qcom-arduino/devices"
 )
-meta_qcom_3rdparty_devices = [
+meta_qcom_arduino_devices = [
     os.path.basename(d)
-    for d in glob.glob("lava_test_plans/projects/meta-qcom-3rdparty/devices/*")
+    for d in glob.glob("lava_test_plans/projects/meta-qcom-arduino/devices/*")
 ]
-assert len(meta_qcom_3rdparty_devices) > 0
-meta_qcom_3rdparty_testplans = [
-    "meta-qcom-3rdparty/nodistro/boot",
-    "meta-qcom-3rdparty/qcom-distro/boot",
+assert len(meta_qcom_arduino_devices) > 0
+meta_qcom_arduino_testplans = [
+    "meta-qcom-arduino/nodistro/boot",
+    "meta-qcom-arduino/qcom-distro/boot",
 ]
-assert len(meta_qcom_3rdparty_testplans) > 0
-meta_qcom_3rdparty_variable_input_file = "projects/meta-qcom-3rdparty/variables.yaml"
+assert len(meta_qcom_arduino_testplans) > 0
+meta_qcom_arduino_variable_input_file = "projects/meta-qcom-arduino/variables.yaml"
 tests = []
-for device in meta_qcom_3rdparty_devices:
-    for testplan in meta_qcom_3rdparty_testplans:
+for device in meta_qcom_arduino_devices:
+    for testplan in meta_qcom_arduino_testplans:
         tests.append(
             (
-                meta_qcom_3rdparty_variable_input_file,
+                meta_qcom_arduino_variable_input_file,
                 device,
                 testplan,
-                meta_qcom_3rdparty_project_device_path,
+                meta_qcom_arduino_project_device_path,
             )
         )
 
 
 @pytest.mark.parametrize("param", tests)
-def test_call_lava_test_plan_testplans_project_meta_qcom_3rdparty(param):
+def test_call_lava_test_plan_testplans_project_meta_qcom_arduino(param):
     variable_input_file, device, testplan, project_device_path = param
     sys.argv = shlex.split(
         f'lava_test_plans --dry-run --variables "{variable_input_file}" --testplan-device-path "{project_device_path}" --device-type "{device}" --test-plan "{testplan}" {test_lava_validity} {test_lava_validity_container}'
