@@ -16,5 +16,7 @@
 {# exclusions are tracked in                                     #}
 {# https://github.com/qualcomm-linux/qcom-deb-images/issues/647 #}
 {% import "projects/qcom-deb-images/include/excluded-tests.jinja2" as excluded %}
-{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS %}
+{# the firmware intermittently fails runtime SetVariable writes with       #}
+{# EFI_DEVICE_ERROR, so EFI_Variable_Validation passes or fails by chance #}
+{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS + ['EFI_Variable_Validation'] %}
 {% set EXCLUDED_TESTPLANS = excluded.EXCLUDED_TESTPLANS %}
