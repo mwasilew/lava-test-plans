@@ -28,7 +28,6 @@ jobs:
           project: meta-qcom
           testplan: qcom-distro/pre-merge
           os_info: qcom-distro
-          testkit_ref: testkit-2025.10.01
           pr_number: ${{ github.event.pull_request.number }}
           pr_url: ${{ github.event.pull_request.html_url }}
 
@@ -82,6 +81,15 @@ The tool and the test plans ship in the same package, so `ref` moves both togeth
 there is no way for them to disagree. Add `repository` to install from a fork. Checking
 this repository out in the calling workflow is never necessary.
 
+## Test definitions revision
+
+`testkit_ref` defaults to the [qcom-linux-testkit](https://github.com/qualcomm-linux/qcom-linux-testkit)
+tag this revision of the action is tested with, so the `uses:` pin selects the test
+definitions as well and calling workflows do not have to carry a testkit tag of their
+own. Moving to a newer testkit is a change to that default in `action.yml`. The default
+comes from the action itself, not from the revision installed through `ref`. Set
+`testkit_ref` only to try a different revision, for example a testkit pull request.
+
 ## Build URLs
 
 With `build_id` set, the action downloads the `build-url_<machine>_<distro_name>`
@@ -114,7 +122,7 @@ Without `build_id`, the `build_url` input is used for all machines.
 | `os_info` | no | | Sets `OS_INFO`, used in the test job name. |
 | `lava_job_priority` | no | `50` | Priority of the generated jobs. |
 | `test_definitions_repository` | no | `https://github.com/qualcomm-linux/qcom-linux-testkit/` | Repository with the test definitions. |
-| `testkit_ref` | no | | Revision of the test definitions repository (tag, branch or commit SHA). |
+| `testkit_ref` | no | `testkit-2026.09.27` | Revision of the test definitions repository (tag, branch or commit SHA). See [Test definitions revision](#test-definitions-revision). |
 | `pr_number` | no | | Added to the LAVA job metadata as `PR_NUMBER`. |
 | `pr_url` | no | | Added to the LAVA job metadata as `PR_URL`. |
 | `validity_container` | no | | When set, rendered jobs are validated with the LAVA validator using this container image. Requires docker on the runner. |

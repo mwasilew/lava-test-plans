@@ -94,9 +94,13 @@ inputs:
     required: false
     default: "https://github.com/qualcomm-linux/qcom-linux-testkit/"
   testkit_ref:
-    description: "Revision of the test definitions repository. Can be a tag, branch or commit SHA"
+    description: >
+      Revision of the test definitions repository: a tag, branch or commit SHA.
+      Defaults to the qcom-linux-testkit CalVer tag (testkit-YYYY.MM.DD) this
+      revision of the action is tested with, so pinning the action pins the
+      test definitions too. Set it only to try a different revision.
     required: false
-    default: ""
+    default: "testkit-2026.09.27"
   pr_number:
     description: "Pull request number. When set, it is added to the LAVA job metadata as PR_NUMBER"
     required: false
