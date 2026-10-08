@@ -15,11 +15,19 @@
 {# hold it open, which crashes the arduino kernel in fastrpc_rpmsg_remove   #}
 {# and the mainline kernel in __fastrpc_buf_alloc, where the board can     #}
 {# reset and leave the job waiting until it times out.                    #}
+{# iommu requires the msm_iommu driver of the old 32-bit SoCs, while these #}
+{# boards all use arm-smmu, and IPCC requires exactly four remoteprocs      #}
+{# running, which only lemans-evk has, so neither can pass on most boards. #}
+{# Buses fails on DT-declared I2C clients nothing binds to, which differ   #}
+{# from board to board and kernel to kernel.                               #}
 {# The rest are not run on the debian images for now.                         #}
 {% set EXCLUDED_TESTS = [
     'WiFi_OnOff',
     'Timer',
     'Module_Reload_Validation',
+    'iommu',
+    'IPCC',
+    'Buses',
     'AudioRecord',
     'Docker_Kernel_Config',
     'Kubernetes_Kernel_Config',

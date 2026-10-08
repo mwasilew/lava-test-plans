@@ -13,5 +13,6 @@
 {# https://github.com/qualcomm-linux/qcom-deb-images/issues/647 #}
 {% import "projects/qcom-deb-images/include/excluded-tests.jinja2" as excluded %}
 {# hotplug passes or fails by chance (qcom-deb-images #692) #}
-{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS + ['hotplug'] %}
+{# the board exposes no /dev/watchdog on any kernel #}
+{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS + ['hotplug', 'watchdog'] %}
 {% set EXCLUDED_TESTPLANS = excluded.EXCLUDED_TESTPLANS %}
