@@ -9,5 +9,7 @@
 {# https://github.com/qualcomm-linux/qcom-deb-images/issues/647 #}
 {% import "projects/qcom-deb-images/include/excluded-tests.jinja2" as excluded %}
 {# WiFi_Firmware_Driver passes or fails by chance (qcom-deb-images #692) #}
-{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS + ['WiFi_Firmware_Driver'] %}
+{# hotplug takes the board down: it reset on taking CPU0 offline with the #}
+{# arduino kernel and hung on bringing CPU1 back with linux-next          #}
+{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS + ['WiFi_Firmware_Driver', 'hotplug'] %}
 {% set EXCLUDED_TESTPLANS = excluded.EXCLUDED_TESTPLANS %}
