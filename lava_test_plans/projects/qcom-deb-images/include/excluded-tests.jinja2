@@ -11,10 +11,15 @@
 {# Timer needs posix_timers, which debian does not package and the testkit  #}
 {# has no mapping for, so it falls into the same trap on kernels that ship  #}
 {# headers and hangs kernel-baseport until the test action times out.       #}
+{# Module_Reload_Validation unloads fastrpc while the fastrpc daemons still #}
+{# hold it open, which crashes the arduino kernel in fastrpc_rpmsg_remove   #}
+{# and the mainline kernel in __fastrpc_buf_alloc, where the board can     #}
+{# reset and leave the job waiting until it times out.                    #}
 {# The rest are not run on the debian images for now.                         #}
 {% set EXCLUDED_TESTS = [
     'WiFi_OnOff',
     'Timer',
+    'Module_Reload_Validation',
     'AudioRecord',
     'Docker_Kernel_Config',
     'Kubernetes_Kernel_Config',
