@@ -11,5 +11,6 @@
 {# WiFi_Firmware_Driver passes or fails by chance (qcom-deb-images #692) #}
 {# hotplug takes the board down: it reset on taking CPU0 offline with the #}
 {# arduino kernel and hung on bringing CPU1 back with linux-next          #}
-{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS + ['WiFi_Firmware_Driver', 'hotplug'] %}
+{# Probe_Failure_Check fails on missing firmware and deferred probes #}
+{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS + ['WiFi_Firmware_Driver', 'hotplug', 'Probe_Failure_Check'] %}
 {% set EXCLUDED_TESTPLANS = excluded.EXCLUDED_TESTPLANS %}

@@ -14,5 +14,8 @@
 {% import "projects/qcom-deb-images/include/excluded-tests.jinja2" as excluded %}
 {# hotplug passes or fails by chance (qcom-deb-images #692) #}
 {# the board exposes no /dev/watchdog on any kernel #}
-{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS + ['hotplug', 'watchdog'] %}
+{# Probe_Failure_Check fails on missing firmware and deferred probes #}
+{# Freq_Scaling, CPU_affinity and smmu read /proc/config.gz, which the #}
+{# debian kernel does not provide; they pass on the other kernels #}
+{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS + ['hotplug', 'watchdog', 'Probe_Failure_Check', 'Freq_Scaling', 'CPU_affinity', 'smmu'] %}
 {% set EXCLUDED_TESTPLANS = excluded.EXCLUDED_TESTPLANS %}

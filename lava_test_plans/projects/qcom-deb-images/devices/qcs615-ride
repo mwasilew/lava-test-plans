@@ -13,5 +13,7 @@
 {# exclusions are tracked in                                     #}
 {# https://github.com/qualcomm-linux/qcom-deb-images/issues/647 #}
 {% import "projects/qcom-deb-images/include/excluded-tests.jinja2" as excluded %}
-{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS %}
+{# Freq_Scaling, CPU_affinity and smmu read /proc/config.gz, which the #}
+{# debian kernel does not provide #}
+{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS + ['Freq_Scaling', 'CPU_affinity', 'smmu'] %}
 {% set EXCLUDED_TESTPLANS = excluded.EXCLUDED_TESTPLANS %}

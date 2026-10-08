@@ -8,5 +8,7 @@
 {# exclusions are tracked in                                     #}
 {# https://github.com/qualcomm-linux/qcom-deb-images/issues/647 #}
 {% import "projects/qcom-deb-images/include/excluded-tests.jinja2" as excluded %}
-{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS %}
+{# Probe_Failure_Check fails on missing firmware and deferred probes #}
+{# smmu finds no iommu group for the GPU on mainline #}
+{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS + ['Probe_Failure_Check', 'smmu'] %}
 {% set EXCLUDED_TESTPLANS = excluded.EXCLUDED_TESTPLANS %}

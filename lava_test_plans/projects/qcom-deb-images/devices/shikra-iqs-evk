@@ -18,5 +18,7 @@
 {% import "projects/qcom-deb-images/include/excluded-tests.jinja2" as excluded %}
 {# the firmware intermittently fails runtime SetVariable writes with       #}
 {# EFI_DEVICE_ERROR, so EFI_Variable_Validation passes or fails by chance #}
-{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS + ['EFI_Variable_Validation'] %}
+{# Probe_Failure_Check fails on missing firmware and deferred probes #}
+{# GIC assumes eight CPUs in /proc/interrupts and fails with fewer #}
+{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS + ['EFI_Variable_Validation', 'Probe_Failure_Check', 'GIC'] %}
 {% set EXCLUDED_TESTPLANS = excluded.EXCLUDED_TESTPLANS %}

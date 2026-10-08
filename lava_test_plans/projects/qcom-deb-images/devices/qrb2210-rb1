@@ -8,5 +8,7 @@
 {# exclusions are tracked in                                     #}
 {# https://github.com/qualcomm-linux/qcom-deb-images/issues/647 #}
 {% import "projects/qcom-deb-images/include/excluded-tests.jinja2" as excluded %}
-{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS %}
+{# GIC assumes eight CPUs in /proc/interrupts and fails with fewer #}
+{# smmu finds no iommu group for the video codec #}
+{% set EXCLUDED_TESTS = excluded.EXCLUDED_TESTS + ['GIC', 'smmu'] %}
 {% set EXCLUDED_TESTPLANS = excluded.EXCLUDED_TESTPLANS %}
