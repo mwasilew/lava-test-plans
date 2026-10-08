@@ -8,9 +8,13 @@
 {# the package to install and dumps apt's policy for the whole archive down   #}
 {# the serial console, using up the whole budget of the test action so that   #}
 {# nothing after it runs. Drop it until the testkit is fixed.                 #}
+{# Timer needs posix_timers, which debian does not package and the testkit  #}
+{# has no mapping for, so it falls into the same trap on kernels that ship  #}
+{# headers and hangs kernel-baseport until the test action times out.       #}
 {# The rest are not run on the debian images for now.                         #}
 {% set EXCLUDED_TESTS = [
     'WiFi_OnOff',
+    'Timer',
     'AudioRecord',
     'Docker_Kernel_Config',
     'Kubernetes_Kernel_Config',
