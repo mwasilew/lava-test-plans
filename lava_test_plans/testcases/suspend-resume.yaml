@@ -1,0 +1,113 @@
+{% extends "testcases/templates/master.jinja2" %}
+
+{# Suspend to RAM and resume once per mode in SUSPEND_MODES, woken by the #}
+{# lab: resume-check records the state before the suspend and checks the #}
+{# cycle after it. The device needs the wait_resume and wake_up commands; #}
+{# devices without them exclude the test plan.                            #}
+{# A mode is written to /sys/power/mem_sleep before the suspend; the mode #}
+{# "default" keeps the kernel's. BOOT_OS_PROMPT is the shell prompt.      #}
+{% set test_name = "suspend-resume" %}
+{% set modes = SUSPEND_MODES|default(["default"]) %}
+{% set test_timeout = 5 + 10 * modes|length %}
+{% set user_commands_timeout = user_commands_timeout|default(2) %}
+{# resume-check is not in Linaro/test-definitions yet. #}
+{% set resume_check_repository = RESUME_CHECK_REPOSITORY|default("https://github.com/mwasilew/test-definitions.git") %}
+{% set resume_check_branch = RESUME_CHECK_BRANCH|default("suspend-resume") %}
+{% set resume_check_expected = [
+    "pre-suspend-state-found",
+    "resumed-without-reboot",
+    "time-since-pre-suspend-check",
+    "suspend-stats-available",
+    "suspend-cycle-completed",
+    "no-failed-suspend-cycle",
+    "no-failures-in-freeze",
+    "no-failures-in-prepare",
+    "no-failures-in-suspend",
+    "no-failures-in-suspend_late",
+    "no-failures-in-suspend_noirq",
+    "no-failures-in-resume",
+    "no-failures-in-resume_early",
+    "no-failures-in-resume_noirq",
+    "suspend-entered-after-pre-suspend-check",
+    "resume-logged-in-kernel-log",
+    "no-errors-during-resume",
+] %}
+
+{% macro resume_check(name, path, expected=[]) %}
+- test:
+    timeout:
+      minutes: 5
+    definitions:
+    - from: git
+      name: {{ name }}
+      path: automated/linux/resume-check/{{ path }}
+      repository: {{ resume_check_repository }}
+{% if resume_check_branch %}
+      branch: {{ resume_check_branch }}
+{% endif %}
+{% if expected %}
+      expected:
+{% for case in expected %}
+      - {{ case }}
+{% endfor %}
+{% endif %}
+{% endmacro %}
+
+{% block test_target %}
+{# The device template sets BOOT_OS_PROMPT, so read it here, not above. #}
+{% set shell_prompts = BOOT_OS_PROMPT|default([]) %}
+{% set shell_prompts = [shell_prompts] if shell_prompts is string else shell_prompts %}
+{# The boot accepts this fallback too (include/boot_target/boot_os_prompt.jinja2). #}
+{% set shell_prompts = shell_prompts + ["root@(.*):[/~]#"] %}
+{% for mode in modes %}
+{{ resume_check("pre-suspend-check-" ~ mode, "pre-suspend-check.yaml") }}
+{# The suspend runs in the background, five seconds later, so that the  #}
+{# console stays usable; the markers it prints before the suspend and   #}
+{# once the write to /sys/power/state has returned (after the resume,   #}
+{# or at once if the write failed) need no shell prompt. The arithmetic #}
+{# keeps the echo of the command from matching them.                    #}
+- test:
+    interactive:
+    - name: suspend-{{ mode }}
+      prompts:
+      - 'lava-suspend-2'
+      script:
+      - name: suspend-{{ mode }}-request
+        command: '(sleep 5; echo "lava-suspend-$((1 + 1))"; {% if mode != "default" %}echo {{ mode }} > /sys/power/mem_sleep && {% endif %}echo mem > /sys/power/state && echo "lava-resumed-$((2 + 1))" || echo "lava-suspend-failed-$((2 + 1))") &'
+    timeout:
+      minutes: 1
+- command:
+    name: wait_resume
+    timeout:
+      minutes: {{ user_commands_timeout }}
+- command:
+    name: wake_up
+    timeout:
+      minutes: {{ user_commands_timeout }}
+- test:
+    interactive:
+    - name: resume-{{ mode }}
+      prompts:
+      - 'lava-resumed-3'
+      script:
+      - name: resume-{{ mode }}-returned
+        command:
+        failures:
+        - message: 'lava-suspend-failed-3'
+          exception: TestError
+          error: 'echo mem > /sys/power/state failed'
+{# The test shell waits for the last prompts an interactive step set: #}
+{# hand it the shell prompt again.                                     #}
+    - name: shell-{{ mode }}
+      prompts:
+{% for prompt in shell_prompts %}
+      - {{ prompt|tojson }}
+{% endfor %}
+      script:
+      - name: shell-{{ mode }}-prompt
+        command: ''
+    timeout:
+      minutes: 2
+{{ resume_check("resume-check-" ~ mode, "resume-check.yaml", resume_check_expected) }}
+{% endfor %}
+{% endblock test_target %}

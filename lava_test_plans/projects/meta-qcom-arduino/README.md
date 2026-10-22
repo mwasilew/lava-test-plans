@@ -29,6 +29,11 @@ Two things differ from the Debian images the base devices were written for:
   physical partitions, so it needs both rawprogram/patch pairs in a single eMMC
   stage rather than the Debian spinor + eMMC split.
 
+## Test plans
+
+`qcom-distro/suspend` runs `testcases/suspend-resume.yaml`: both boards have the
+lab's `wait_resume` and `wake_up` commands that wake them from suspend.
+
 ## Testing
 
 Render a job without submitting it:

@@ -129,6 +129,7 @@ assert len(meta_qcom_arduino_devices) > 0
 meta_qcom_arduino_testplans = [
     "meta-qcom-arduino/nodistro/boot",
     "meta-qcom-arduino/qcom-distro/boot",
+    "meta-qcom-arduino/qcom-distro/suspend",
 ]
 assert len(meta_qcom_arduino_testplans) > 0
 meta_qcom_arduino_variable_input_file = "projects/meta-qcom-arduino/variables.yaml"
