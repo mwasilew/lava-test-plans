@@ -57,6 +57,7 @@ meta_qcom_testplans = [
     "meta-qcom/qcom-distro/performance",
     "meta-qcom/qcom-distro/system",
     "meta-qcom/qcom-distro/virtualization",
+    "meta-qcom/qcom-distro/suspend",
 ]
 assert len(meta_qcom_testplans) > 0
 meta_qcom_variable_input_file = "projects/meta-qcom/variables.yaml"
