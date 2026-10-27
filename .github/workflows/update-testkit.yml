@@ -1,0 +1,154 @@
+name: Update testkit
+
+# Every Monday, check for a qcom-linux-testkit release tag (testkit-YYYY.MM.DD)
+# newer than the testkit_ref default of the action. Every test plan is rendered
+# through render-jobs.yml against it and the overlays are built. When all of
+# them pass, a pull request moves the testkit_ref default to the new tag and is
+# set to merge automatically. Once it is merged, render-jobs.yml runs on the
+# default branch again and tags the merge commit with the testkit tag.
+#
+# The pull request is opened with the TESTKIT_UPDATE_TOKEN secret (a
+# fine-grained token or a GitHub App token with contents and pull requests
+# write access), because pull requests opened with GITHUB_TOKEN do not start
+# their own checks and could not be merged by the branch protection rules.
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+# grant nothing by default; every job below declares the scopes it needs
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+env:
+  TESTKIT_REPOSITORY: https://github.com/qualcomm-linux/qcom-linux-testkit
+
+jobs:
+  testkit:
+    name: Find new testkit release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # actions/checkout
+      pull-requests: read # gh pr list
+    outputs:
+      tag: ${{ steps.find.outputs.tag }}
+      branch: ${{ steps.find.outputs.branch }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Find new testkit release
+        id: find
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          CURRENT=$(yq -r '.inputs.testkit_ref.default' action.yml)
+          LATEST=$(git ls-remote --tags --refs "${TESTKIT_REPOSITORY}" \
+            | sed 's|.*refs/tags/||' \
+            | grep -E '^testkit-[0-9]{4}\.[0-9]{2}\.[0-9]{2}$' \
+            | sort | tail -n 1)
+          echo "testkit_ref default: ${CURRENT}, latest testkit release: ${LATEST}"
+          # the names sort by date
+          if [ -z "${LATEST}" ] || [[ ! "${LATEST}" > "${CURRENT}" ]]; then
+            echo "Nothing to update"
+            exit 0
+          fi
+          BRANCH="update-testkit/${LATEST}"
+          OPEN=$(gh pr list --repo "${GITHUB_REPOSITORY}" --head "${BRANCH}" \
+            --state open --json url --jq '.[].url')
+          if [ -n "${OPEN}" ]; then
+            echo "${LATEST} is waiting in ${OPEN}"
+            exit 0
+          fi
+          echo "tag=${LATEST}" >> "${GITHUB_OUTPUT}"
+          echo "branch=${BRANCH}" >> "${GITHUB_OUTPUT}"
+
+  render:
+    name: Render with ${{ needs.testkit.outputs.tag }}
+    needs: testkit
+    if: ${{ needs.testkit.outputs.tag != '' }}
+    permissions:
+      # render-jobs.yml asks for contents: write in its tag job, which only
+      # runs on a push to the default branch, not when called from here
+      contents: write
+    uses: $/.github/workflows/render-jobs.yml
+    with:
+      testkit_ref: ${{ needs.testkit.outputs.tag }}
+
+  pull-request:
+    name: Propose ${{ needs.testkit.outputs.tag }}
+    # runs only when every test plan rendered and its overlays built
+    needs: [testkit, render]
+    runs-on: ubuntu-latest
+    permissions: {} # everything is done with TESTKIT_UPDATE_TOKEN
+    steps:
+      - name: Check token
+        env:
+          GH_TOKEN: ${{ secrets.TESTKIT_UPDATE_TOKEN }}
+        run: |
+          if [ -z "${GH_TOKEN}" ]; then
+            echo "::error::the TESTKIT_UPDATE_TOKEN secret is not set"
+            exit 1
+          fi
+
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Pin the testkit release in the action
+        env:
+          TAG: ${{ needs.testkit.outputs.tag }}
+        run: |
+          set -euo pipefail
+          # the default of the testkit_ref input, up to the next input
+          sed -i "/^  testkit_ref:/,/^  [a-z_]*:/ s/^\(    default: \)\".*\"/\1\"${TAG}\"/" action.yml
+          sed -i "s/^\(| \`testkit_ref\` | no | \`\)[^\`]*\`/\1${TAG}\`/" ACTION.md
+          if [ "$(yq -r '.inputs.testkit_ref.default' action.yml)" != "${TAG}" ]; then
+            echo "::error::unable to set the testkit_ref default in action.yml to ${TAG}"
+            exit 1
+          fi
+          if ! grep -qF "| \`testkit_ref\` | no | \`${TAG}\` |" ACTION.md; then
+            echo "::error::unable to set the testkit_ref default in ACTION.md to ${TAG}"
+            exit 1
+          fi
+          git diff
+
+      - name: Open pull request
+        id: pr
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.TESTKIT_UPDATE_TOKEN }}
+          base: ${{ github.ref_name }}
+          # a branch left over from a closed pull request is replaced
+          branch: ${{ needs.testkit.outputs.branch }}
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          signoff: true
+          commit-message: |
+            action: default testkit_ref to ${{ needs.testkit.outputs.tag }}
+
+            All test plans render with qcom-linux-testkit ${{ needs.testkit.outputs.tag }}
+            and the overlays of their test jobs build:
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          title: "action: default testkit_ref to ${{ needs.testkit.outputs.tag }}"
+          body: |
+            Move the testkit_ref default of the action to [${{ needs.testkit.outputs.tag }}](${{ env.TESTKIT_REPOSITORY }}/releases/tag/${{ needs.testkit.outputs.tag }}).
+
+            All test plans render with it and the overlays of their test jobs build: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            Once merged, the merge commit is tagged ${{ needs.testkit.outputs.tag }}.
+
+      - name: Enable auto-merge
+        if: ${{ steps.pr.outputs.pull-request-number != '' }}
+        env:
+          GH_TOKEN: ${{ secrets.TESTKIT_UPDATE_TOKEN }}
+          PR_NUMBER: ${{ steps.pr.outputs.pull-request-number }}
+        run: |
+          if ! gh pr merge "${PR_NUMBER}" --repo "${GITHUB_REPOSITORY}" --auto --merge; then
+            echo "::warning::unable to enable auto-merge, the pull request has to be merged by hand"
+          fi
