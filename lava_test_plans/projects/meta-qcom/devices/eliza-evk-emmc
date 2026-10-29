@@ -1,0 +1,5 @@
+{% extends "devices/eliza-evk-emmc" %}
+
+{# Device-specific test exclusions for meta-qcom project #}
+
+{# Exclude unsupported testplans for this device #}

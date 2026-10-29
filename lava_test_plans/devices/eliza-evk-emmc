@@ -1,0 +1,19 @@
+{% set PROJECT = PROJECT|default("") %}
+{% extends PROJECT+"qdl.jinja2" %}
+
+{# Eliza EVK variant depends on SoM version #}
+{# this device file covers eMMC SoM only #}
+{% set BOOT_OS_PROMPT = BOOT_OS_PROMPT|default("root@eliza-evk-emmc") %}
+{% set ROOTFS_URL_COMP = ROOTFS_URL_COMP|default("gz") %}
+
+{# qdl deployment - device specific flashing parameters #}
+{% set firehose_program = firehose_program|default("xbl_s_devprg_ns.melf") %}
+{% set rawprogram = rawprogram|default("rawprogram0.xml rawprogram1.xml") %}
+{% set patch = patch|default("patch0.xml patch1.xml") %}
+{% set qdl_stages = qdl_stages|default([
+    {"storage": "emmc", "path": "spinor", "rawprogram": "rawprogram0.xml", "patch": "patch0.xml"},
+]) %}
+
+{% set rootfs_label = 'rootfs' %}
+
+{% block device_type %}eliza-evk-emmc{% endblock %}
