@@ -1,5 +1,10 @@
 {% extends "devices/mahua-crd" %}
 
+{# Device-specific values exported to testcase templates #}
+{% set TESTCASE_VARIABLES = {
+    "FASTRPC_DOMAINS": ['adsp', 'cdsp']
+} %}
+
 {# spinor + nvme flashing stages come from the common device #}
 {% set qdl_image_dir = "flash_mahua-crd_nvme" %}
 {% set qdl_rootfs_image = "disk-sdcard.img2" %}

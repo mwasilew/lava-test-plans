@@ -246,45 +246,65 @@ def test_template_count_with_exclusions(device_name, tmp_path):
     )
 
 
-# DSP domains that fastrpc_test has to cover on each target
+# DSP domains that fastrpc_test has to cover on each target, per project
 fastrpc_domains_per_device = {
-    "glymur-crd": ["adsp", "cdsp"],
-    "iq-8275-evk": ["adsp", "cdsp", "gdsp0"],
-    "iq-9075-evk": ["adsp", "cdsp", "cdsp1", "gdsp0", "gdsp1"],
-    "iq-x7181-evk": ["adsp", "cdsp"],
-    "kaanapali-mtp": ["adsp", "cdsp"],
-    "mahua-crd": ["adsp", "cdsp"],
-    "qcs615-ride": ["adsp", "cdsp"],
-    "qcs8300-ride-sx": ["adsp", "cdsp", "gdsp0"],
-    "qcs9100-ride-sx": ["adsp", "cdsp", "cdsp1", "gdsp0", "gdsp1"],
-    "rb1-core-kit": ["adsp"],
-    "rb3gen2-core-kit": ["adsp", "cdsp"],
-    "shikra-evk": ["cdsp"],
-    "sm8750-mtp": ["adsp", "cdsp"],
+    "meta-qcom": {
+        "glymur-crd": ["adsp", "cdsp"],
+        "iq-8275-evk": ["adsp", "cdsp", "gdsp0"],
+        "iq-9075-evk": ["adsp", "cdsp", "cdsp1", "gdsp0", "gdsp1"],
+        "iq-x7181-evk": ["adsp", "cdsp"],
+        "kaanapali-mtp": ["adsp", "cdsp"],
+        "mahua-crd": ["adsp", "cdsp"],
+        "qcs615-ride": ["adsp", "cdsp"],
+        "qcs8300-ride-sx": ["adsp", "cdsp", "gdsp0"],
+        "qcs9100-ride-sx": ["adsp", "cdsp", "cdsp1", "gdsp0", "gdsp1"],
+        "rb1-core-kit": ["adsp"],
+        "rb3gen2-core-kit": ["adsp", "cdsp"],
+        "shikra-evk": ["cdsp"],
+        "sm8750-mtp": ["adsp", "cdsp"],
+    },
+    "qcom-deb-images": {
+        "glymur-crd": ["adsp", "cdsp"],
+        "hamoa-iot-evk": ["adsp", "cdsp"],
+        "kaanapali-mtp": ["adsp", "cdsp"],
+        "lemans-evk": ["adsp", "cdsp", "cdsp1", "gdsp0", "gdsp1"],
+        "mahua-crd": ["adsp", "cdsp"],
+        "monaco-evk": ["adsp", "cdsp", "gdsp0"],
+        "qcs615-ride": ["adsp", "cdsp"],
+        "qcs6490-rb3gen2": ["adsp", "cdsp"],
+        "qcs8300-ride": ["adsp", "cdsp", "gdsp0"],
+        "qcs9100-ride-r3": ["adsp", "cdsp", "cdsp1", "gdsp0", "gdsp1"],
+        "qrb2210-rb1": ["adsp"],
+        "shikra-iqs-evk": ["cdsp"],
+        "sm8750-mtp": ["adsp", "cdsp"],
+    },
 }
 
 
 @pytest.mark.parametrize(
-    "device_name,expected_domains", sorted(fastrpc_domains_per_device.items())
+    "project,device_name,expected_domains",
+    [
+        (project, device_name, domains)
+        for project, devices in sorted(fastrpc_domains_per_device.items())
+        for device_name, domains in sorted(devices.items())
+    ],
 )
-def test_fastrpc_variants_per_device(device_name, expected_domains, tmp_path):
+def test_fastrpc_variants_per_device(project, device_name, expected_domains, tmp_path):
     """Render one explicit FastRPC testcase for every expected DSP domain."""
     temp_output = tmp_path / "test_output"
+    device = f"projects/{project}/devices/{device_name}"
 
     sys.argv = shlex.split(
         f'lava_test_plans --dry-run --variables "variables.ini" '
-        f'--testplan-device-path "lava_test_plans/projects/meta-qcom/devices" '
-        f'--device-type "projects/meta-qcom/devices/{device_name}" '
+        f'--testplan-device-path "lava_test_plans/projects/{project}/devices" '
+        f'--device-type "{device}" '
         f'--test-case "pre-merge-basic.yaml" '
         f'--dry-run-path "{temp_output}"'
     )
 
     assert main() == 0
 
-    generated_file = (
-        temp_output / f"projects/meta-qcom/devices/{device_name}/pre-merge-basic.yaml"
-    )
-    rendered = generated_file.read_text()
+    rendered = (temp_output / f"{device}/pre-merge-basic.yaml").read_text()
 
     for domain in expected_domains:
         assert f"name: fastrpc_test_{domain}" in rendered
@@ -304,7 +324,7 @@ def test_fastrpc_variants_per_device(device_name, expected_domains, tmp_path):
 def test_fastrpc_without_domains(tmp_path):
     """Render a single unsuffixed FastRPC testcase when no domains are set."""
     temp_output = tmp_path / "test_output"
-    device = "projects/qcom-deb-images/devices/qcs6490-rb3gen2"
+    device = "projects/qcom-deb-images/devices/purwa-iot-evk"
 
     sys.argv = shlex.split(
         f'lava_test_plans --dry-run --variables "variables.ini" '

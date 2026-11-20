@@ -1,5 +1,10 @@
 {% extends "devices/qrb2210-rb1" %}
 
+{# Device-specific values exported to testcase templates #}
+{% set TESTCASE_VARIABLES = {
+    "FASTRPC_DOMAINS": ['adsp']
+} %}
+
 {# the emmc flashing stage comes from the common device #}
 {% set qdl_image_dir = "flash_qrb2210-rb1_emmc" %}
 {% set qdl_rootfs_image = "disk-sdcard.img2" %}

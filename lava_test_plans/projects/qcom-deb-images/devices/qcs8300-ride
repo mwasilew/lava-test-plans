@@ -1,5 +1,10 @@
 {% extends "devices/monaco-ride" %}
 
+{# Device-specific values exported to testcase templates #}
+{% set TESTCASE_VARIABLES = {
+    "FASTRPC_DOMAINS": ['adsp', 'cdsp', 'gdsp0']
+} %}
+
 {# the sail_nor + ufs flashing stages come from the common device #}
 {% set qdl_image_dir = "flash_qcs8300-ride_ufs" %}
 {% set qdl_rootfs_image = "disk-ufs.img2" %}

@@ -1,5 +1,10 @@
 {% extends "devices/qcs9100-ride" %}
 
+{# Device-specific values exported to testcase templates #}
+{% set TESTCASE_VARIABLES = {
+    "FASTRPC_DOMAINS": ['adsp', 'cdsp', 'cdsp1', 'gdsp0', 'gdsp1']
+} %}
+
 {# the sail_nor + ufs flashing stages come from the common device #}
 {% set qdl_image_dir = "flash_qcs9100-ride-r3_ufs" %}
 {% set qdl_rootfs_image = "disk-ufs.img2" %}

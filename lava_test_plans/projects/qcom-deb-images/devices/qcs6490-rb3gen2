@@ -1,5 +1,10 @@
 {% extends "devices/qcs6490-rb3gen2" %}
 
+{# Device-specific values exported to testcase templates #}
+{% set TESTCASE_VARIABLES = {
+    "FASTRPC_DOMAINS": ['adsp', 'cdsp']
+} %}
+
 {# the ufs flashing stage comes from the common device #}
 {% set qdl_image_dir = "flash_qcs6490-rb3gen2-vision-kit_ufs" %}
 {% set qdl_rootfs_image = "disk-ufs.img2" %}

@@ -1,5 +1,10 @@
 {% extends "devices/shikra-iqs-evk" %}
 
+{# Device-specific values exported to testcase templates #}
+{% set TESTCASE_VARIABLES = {
+    "FASTRPC_DOMAINS": ['cdsp']
+} %}
+
 {# ptool describes two physical partitions for shikra-evk/emmc and emits a  #}
 {# rawprogram/patch pair for each: 0 is the main storage, 1 is the JEDEC    #}
 {# boot area holding just the CDT. Flash both, so the board also gets the   #}

@@ -1,5 +1,10 @@
 {% extends "devices/lemans-evk" %}
 
+{# Device-specific values exported to testcase templates #}
+{% set TESTCASE_VARIABLES = {
+    "FASTRPC_DOMAINS": ['adsp', 'cdsp', 'cdsp1', 'gdsp0', 'gdsp1']
+} %}
+
 {# the debian image is flashed over ufs only; the common device flashes the #}
 {# sail_nor stage first. The stage list is spelled out rather than built    #}
 {# from rawprogram/patch, which the common device only defines later.       #}
